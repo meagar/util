@@ -3,9 +3,27 @@ package util
 
 import (
 	"bufio"
+	"fmt"
 	"log"
 	"os"
+	"syscall"
+
+	"golang.org/x/term"
 )
+
+// GetPassword prompts the user for a password without echoing as the user types
+func GetPassword(prompt string) (password string) {
+	fmt.Print(prompt)
+	bytePassword, err := term.ReadPassword(int(syscall.Stdin))
+
+	if err != nil {
+		panic(err)
+	}
+	fmt.Println("")
+
+	password = string(bytePassword)
+	return
+}
 
 // EachLine iterates over each line of a file, calling the fn callback
 func EachLine(filename string, fn func(string)) {
